@@ -1,0 +1,4 @@
+﻿
+Domain Driven Design konseptiyle benzer bir yaklaşımla MicroService'lere karar verin.
+
+Microservice'leri ortaya çıkarmak için bir yöntem: Event Storming!
