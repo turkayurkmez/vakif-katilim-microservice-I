@@ -1,3 +1,10 @@
+using Catalog.Application.Contracts.Repositories;
+using Catalog.Application.Features.Product.GetAllProducts;
+using Catalog.Persistence.Data;
+using Catalog.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +13,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<GetAllProductsHandler>());
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+var connectionString = builder.Configuration.GetConnectionString("db");
+builder.Services.AddDbContext<CatalogDbContext>(option => option.UseSqlServer(connectionString));
+
 
 var app = builder.Build();
 
