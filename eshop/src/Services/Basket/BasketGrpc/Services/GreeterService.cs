@@ -1,4 +1,3 @@
-using BasketGrpc;
 using Grpc.Core;
 
 namespace BasketGrpc.Services

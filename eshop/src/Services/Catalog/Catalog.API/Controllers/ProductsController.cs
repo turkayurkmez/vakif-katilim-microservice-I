@@ -7,7 +7,6 @@ using Catalog.Application.Features.Product.GetProductsByCategory;
 using Catalog.Application.Features.Product.SearchProductByName;
 using Catalog.Application.Features.Product.UpdateProduct;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers
@@ -62,7 +61,7 @@ namespace Catalog.API.Controllers
         {
             if (ModelState.IsValid)
             {
-               var response =  await mediator.Send(request);
+                var response = await mediator.Send(request);
                 return CreatedAtAction(nameof(Get), routeValues: new { id = response.Id }, request);
             }
             return BadRequest(ModelState);
@@ -73,7 +72,7 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ChangePrice(ChangeProductPriceCommand command)
         {
-           // ChangeProductPriceCommand command = new ChangeProductPriceCommand(id, price);
+            // ChangeProductPriceCommand command = new ChangeProductPriceCommand(id, price);
             try
             {
                 await mediator.Send(command);
@@ -85,7 +84,7 @@ namespace Catalog.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            
+
         }
 
         [HttpPut("{id:int}")]
@@ -113,7 +112,7 @@ namespace Catalog.API.Controllers
             await mediator.Send(deleteCommand);
 
             return NoContent();
-            
+
 
 
         }

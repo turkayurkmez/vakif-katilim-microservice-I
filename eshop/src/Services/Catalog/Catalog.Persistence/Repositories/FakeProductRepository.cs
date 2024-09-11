@@ -1,10 +1,5 @@
 ﻿using Catalog.Application.Contracts.Repositories;
 using Catalog.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalog.Persistence.Repositories
 {
@@ -32,7 +27,7 @@ namespace Catalog.Persistence.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-          return   await Task.FromResult(this._products);
+            return await Task.FromResult(this._products);
         }
 
         public Task<Product> GetAsync(int id)

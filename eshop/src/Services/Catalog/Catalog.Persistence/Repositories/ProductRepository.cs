@@ -2,11 +2,6 @@
 using Catalog.Domain;
 using Catalog.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalog.Persistence.Repositories
 {

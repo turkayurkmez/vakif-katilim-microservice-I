@@ -1,11 +1,6 @@
 ﻿using Catalog.Application.Contracts.Repositories;
 using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalog.Application.Features.Product.SearchProductByName
 {
@@ -17,7 +12,7 @@ namespace Catalog.Application.Features.Product.SearchProductByName
             var searchedResult = products.Adapt<IEnumerable<SearchProductResponse>>();
             var response = new SearchProductsByNameResponse(searchedResult);
             return response;
-                
+
         }
     }
 }

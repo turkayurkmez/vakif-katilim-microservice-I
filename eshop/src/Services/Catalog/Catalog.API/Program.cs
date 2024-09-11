@@ -3,7 +3,6 @@ using Catalog.Application.Features.Product.GetAllProducts;
 using Catalog.Persistence.Data;
 using Catalog.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

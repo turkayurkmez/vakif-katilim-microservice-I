@@ -7,7 +7,7 @@ namespace Catalog.Application.Features.Product.DeleteProduct
     {
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-           await repository.DeleteAsync(request.Id);
+            await repository.DeleteAsync(request.Id);
         }
     }
 
