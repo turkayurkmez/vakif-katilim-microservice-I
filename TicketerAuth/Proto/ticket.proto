@@ -1,0 +1,23 @@
+//Bu proto'da iki fonksiyonumuz olacak GetAvailableTickets, BuyTickets
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+package ticket;
+
+service Ticketer{
+	rpc GetAvailableTickets(google.protobuf.Empty) returns (AvailableTicketResponse);
+	rpc BuyTickets(BuyTicketsRequest) returns (BuyTicketsResponse);
+}
+
+message AvailableTicketResponse{
+	int32 count = 1;
+}
+
+message BuyTicketsRequest{
+	int32 count = 1;
+}
+
+message BuyTicketsResponse{
+	bool success = 1;
+}
