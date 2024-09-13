@@ -14,17 +14,21 @@ builder.Services.AddMassTransit(configure =>
     configure.AddConsumer<StockNotReservedConsumer>();
     configure.AddConsumer<PaymentCompletedConsumer>();
     configure.AddConsumer<PaymentFailedConsumer>();
+    configure.AddConsumer<PriceDiscountedEventConsumer>();
 
 
     configure.UsingRabbitMq((context, configurator) =>
     {
-        configurator.Host("localhost", "/", h =>
+        configurator.Host("rabbit-mq", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
 
         });
-
+        configurator.ReceiveEndpoint(nameof(PriceDiscountedEvent), c =>
+        {
+            c.ConfigureConsumer<PriceDiscountedEventConsumer>(context);
+        });
         configurator.ConfigureEndpoints(context);
     });
 

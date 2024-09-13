@@ -19,13 +19,17 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContain
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("db");
+var host = builder.Configuration.GetSection("DefaultHostName").Value;
+var pass = builder.Configuration.GetSection("DefaultPassword").Value;
+connectionString = connectionString.Replace("[HOST]", host)
+                                   .Replace("[PASS]", pass);
 builder.Services.AddDbContext<CatalogDbContext>(option => option.UseSqlServer(connectionString));
 
 builder.Services.AddMassTransit(configure =>
 {
     configure.UsingRabbitMq((context, configurator) =>
     {
-        configurator.Host("localhost", "/", h =>
+        configurator.Host("rabbit-mq", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
@@ -38,6 +42,10 @@ builder.Services.AddMassTransit(configure =>
 });
 
 var app = builder.Build();
+
+var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
+dbContext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

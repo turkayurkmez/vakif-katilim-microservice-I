@@ -12,9 +12,10 @@ Sipariş Olay akışı:
 4. [Payment] servisi, [StockReserved] olayını tüketir. +
 5. Eğer ödeme başarılıysa [PaymentCompleted] fırlar. +
               başarısızsa [PaymentFailed] fırlar +
-6. [Order] servisi [PaymentCompleted]'ı dinler sipariş onaylandı ile kapanır.
+
+6  [Stocks] servisi [PaymentFailed]'i dinler ve stoğu geri günceller +
+7. [Order] servisi [PaymentCompleted]'ı dinler sipariş onaylandı ile kapanır.
    [Order] servisi [PaymentFailed]'ı dinler sipariş reddedildi ile kapanır. 
    [Order] servisi [StockNotReserved]'ı dinler sipariş reddedildi ile kapanır. 
-7  [Stocks] servisi [PaymentFailed]'i dinler ve stoğu geri günceller +
 
 Not: Servis sayısı ve Choreography deseninden bahsedilecek. 

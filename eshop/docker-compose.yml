@@ -1,0 +1,70 @@
+version: '3.4'
+
+services:
+
+
+  rabbit-mq:
+    image: rabbitmq:3.10-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+     
+ 
+  ms-sql-server:
+    image:  mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "pa55W0rd"
+    ports:
+       - "1433:1433"
+  
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: src/Services/Basket/Basket.API/Dockerfile
+
+    depends_on:
+     - rabbit-mq
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
+    environment:
+      DefaultHostName: 'ms-sql-server'
+      DefaultPassword: "pa55W0rd"
+
+    depends_on:
+       - ms-sql-server
+       - rabbit-mq
+
+
+  eshop.order:
+    image: ${DOCKER_REGISTRY-}eshoporder
+    build:
+      context: .
+      dockerfile: src/Services/Order/eshop.Order/Dockerfile
+
+    depends_on:
+      - rabbit-mq
+
+
+  payment.api:
+    image: ${DOCKER_REGISTRY-}paymentapi
+    build:
+      context: .
+      dockerfile: src/Services/Payment/Payment.API/Dockerfile
+    depends_on:
+      - rabbit-mq
+
+
+  eshop.stock.api:
+    image: ${DOCKER_REGISTRY-}eshopstockapi
+    build:
+      context: .
+      dockerfile: src/Services/Stock/eshop.Stock.API/Dockerfile
+    depends_on:
+      - rabbit-mq
+

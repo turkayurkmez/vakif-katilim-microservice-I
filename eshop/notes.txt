@@ -2,3 +2,15 @@
 Domain Driven Design konseptiyle benzer bir yaklaşımla MicroService'lere karar verin.
 
 Microservice'leri ortaya çıkarmak için bir yöntem: Event Storming!
+
+
+BASKET: http://localhost:5277
+CATALOG: http://localhost:5134
+ORDER: http://localhost:5173
+PAYMENT: http://localhost:5184
+STOCK: http://localhost:5222
+
+
+    Mobil Uygulama -> MS
+    Web ->
+    Tv OS -> 
