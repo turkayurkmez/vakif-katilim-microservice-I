@@ -1,11 +1,14 @@
 ﻿using Catalog.Application.Features.Product.ChangeProductPrice;
 using Catalog.Application.Features.Product.CreateProduct;
 using Catalog.Application.Features.Product.DeleteProduct;
+using Catalog.Application.Features.Product.DiscountProductPrice;
 using Catalog.Application.Features.Product.GetAllProducts;
 using Catalog.Application.Features.Product.GetProductById;
 using Catalog.Application.Features.Product.GetProductsByCategory;
 using Catalog.Application.Features.Product.SearchProductByName;
 using Catalog.Application.Features.Product.UpdateProduct;
+using eshop.MessageBus;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +16,7 @@ namespace Catalog.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ProductsController(IMediator mediator) : ControllerBase
+    public class ProductsController(IMediator mediator, IPublishEndpoint publishEndpoint) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -86,6 +89,38 @@ namespace Catalog.API.Controllers
 
 
         }
+
+        [HttpPut("discount/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DiscountPrice(DiscountProductPriceCommand command)
+        {
+            // ChangeProductPriceCommand command = new ChangeProductPriceCommand(id, price);
+            try
+            {
+                var response = await mediator.Send(command);
+                var @event = new PriceDiscountedEvent()
+                {
+                    DiscountPriceCommand = new DiscountPriceCommand
+                    {
+                        NewPrice = response.NewPrice,
+                        OldPrice = response.OldPrice,
+                        ProductId = response.Id
+                    }
+                };
+
+                await publishEndpoint.Publish(@event);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+
+                return BadRequest(ModelState);
+            }
+
+
+        }
+
 
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

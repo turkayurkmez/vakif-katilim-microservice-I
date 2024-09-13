@@ -1,1 +1,20 @@
+﻿
+  İndirim Olay akışı:
+1. Satıcı, Catalog microservice'i ile indirim yapar. Event fırlar.
+2. Basket ms'i bu olayı dinler ve sepetteki ürünlerde indirim yapar!
 
+Sipariş Olay akışı:
+
+1. Sipariş Ekleme olayı fırlar. [Order] -> OrderCreated + 
+2. [Stocks] servisi, [OrderCreated] olayını Consume eder +
+3. Yeterli Stock varsa [StockReserved] olayını fırlatır. +
+   Yeterli stock yoksa [StockNotReserved] olayını fırlatır. +
+4. [Payment] servisi, [StockReserved] olayını tüketir. +
+5. Eğer ödeme başarılıysa [PaymentCompleted] fırlar. +
+              başarısızsa [PaymentFailed] fırlar +
+6. [Order] servisi [PaymentCompleted]'ı dinler sipariş onaylandı ile kapanır.
+   [Order] servisi [PaymentFailed]'ı dinler sipariş reddedildi ile kapanır. 
+   [Order] servisi [StockNotReserved]'ı dinler sipariş reddedildi ile kapanır. 
+7  [Stocks] servisi [PaymentFailed]'i dinler ve stoğu geri günceller +
+
+Not: Servis sayısı ve Choreography deseninden bahsedilecek. 

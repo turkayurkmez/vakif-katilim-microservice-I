@@ -1,35 +1,24 @@
-using Catalog.Application.Contracts.Repositories;
-using Catalog.Application.Features.Product.GetAllProducts;
-using Catalog.Persistence.Data;
-using Catalog.Persistence.Repositories;
+using eshop.MessageBus;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
+using Payment.API.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<GetAllProductsHandler>());
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
-var connectionString = builder.Configuration.GetConnectionString("db");
-builder.Services.AddDbContext<CatalogDbContext>(option => option.UseSqlServer(connectionString));
-
 builder.Services.AddMassTransit(configure =>
 {
+    configure.AddConsumer<StockReservedConsumer>();
     configure.UsingRabbitMq((context, configurator) =>
     {
         configurator.Host("localhost", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
-    
+
         });
 
         configurator.ConfigureEndpoints(context);
@@ -46,8 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
 
-app.MapControllers();
 
 app.Run();
+
